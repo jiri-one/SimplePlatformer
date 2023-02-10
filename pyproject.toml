@@ -1,0 +1,18 @@
+[tool.poetry]
+name = "simpleplatformer"
+version = "0.1.0"
+description = "My first try of platformer game."
+authors = ["jiri.one <nemec@jiri.one>"]
+license = "GPLv3"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+arcade = "^2.6.17"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^7.2.1"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
