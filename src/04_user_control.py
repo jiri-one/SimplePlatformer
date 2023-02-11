@@ -44,7 +44,7 @@ class MyGame(arcade.Window):
 
         arcade.set_background_color(arcade.csscolor.CORNFLOWER_BLUE)
         
-        self.player_move = {None, None, None, None} # up, down, left, right
+        self.player_move = set() # up, down, left, right
 
     def setup(self):
         """Set up the game here. Call this function to restart the game."""
