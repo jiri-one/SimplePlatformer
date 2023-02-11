@@ -3,6 +3,7 @@ Platformer Game
 """
 import arcade
 
+
 # Constants
 SCREEN_WIDTH = 1000
 SCREEN_HEIGHT = 650
@@ -42,6 +43,8 @@ class MyGame(arcade.Window):
 
 
         arcade.set_background_color(arcade.csscolor.CORNFLOWER_BLUE)
+        
+        self.player_move = {None, None, None, None} # up, down, left, right
 
     def setup(self):
         """Set up the game here. Call this function to restart the game."""
@@ -95,52 +98,65 @@ class MyGame(arcade.Window):
         # Draw our Scene
         self.scene.draw()
 
+    def update_player_speed(self):
+        self.player_sprite.change_y = 0
+        self.player_sprite.change_x = 0
+        
+        if "up" in self.player_move and "down" in self.player_move:
+            pass
+        else:
+            if "up" in self.player_move:
+                self.player_sprite.change_y = PLAYER_MOVEMENT_SPEED
+            elif "down" in self.player_move:
+                self.player_sprite.change_y = -PLAYER_MOVEMENT_SPEED
+        
+        if "left" in self.player_move and "right" in self.player_move:
+            pass
+        else:
+            if "left" in self.player_move:
+                self.player_sprite.change_x = -PLAYER_MOVEMENT_SPEED
+            elif "right" in self.player_move:
+                self.player_sprite.change_x = PLAYER_MOVEMENT_SPEED
 
     def on_key_press(self, key, modifiers):
 
         """Called whenever a key is pressed."""
 
-
-
         if key == arcade.key.UP or key == arcade.key.W:
 
-            self.player_sprite.change_y = PLAYER_MOVEMENT_SPEED
+            self.player_move.add("up")
 
         elif key == arcade.key.DOWN or key == arcade.key.S:
 
-            self.player_sprite.change_y = -PLAYER_MOVEMENT_SPEED
+            self.player_move.add("down")
 
         elif key == arcade.key.LEFT or key == arcade.key.A:
 
-            self.player_sprite.change_x = -PLAYER_MOVEMENT_SPEED
+            self.player_move.add("left")
 
         elif key == arcade.key.RIGHT or key == arcade.key.D:
 
-            self.player_sprite.change_x = PLAYER_MOVEMENT_SPEED
-
+            self.player_move.add("right")
+        
+        self.update_player_speed()
 
 
     def on_key_release(self, key, modifiers):
+        """Called when the user releases a key. """
 
-        """Called when the user releases a key."""
+        if key == arcade.key.UP:
+            self.player_move.remove("up")
+            
+        elif key == arcade.key.DOWN:
+            self.player_move.remove("down")
 
+        elif key == arcade.key.LEFT:
+            self.player_move.remove("left")
 
-
-        if key == arcade.key.UP or key == arcade.key.W:
-
-            self.player_sprite.change_y = 0
-
-        elif key == arcade.key.DOWN or key == arcade.key.S:
-
-            self.player_sprite.change_y = 0
-
-        elif key == arcade.key.LEFT or key == arcade.key.A:
-
-            self.player_sprite.change_x = 0
-
-        elif key == arcade.key.RIGHT or key == arcade.key.D:
-
-            self.player_sprite.change_x = 0
+        elif key == arcade.key.RIGHT:
+            self.player_move.remove("right")
+        
+        self.update_player_speed()
 
 
 
