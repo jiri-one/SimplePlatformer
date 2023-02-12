@@ -3,6 +3,7 @@ Platformer Game
 """
 import arcade
 
+
 # Constants
 SCREEN_WIDTH = 1000
 SCREEN_HEIGHT = 650
@@ -12,11 +13,11 @@ SCREEN_TITLE = "Platformer"
 CHARACTER_SCALING = 1
 TILE_SCALING = 0.5
 
+
 # Movement speed of player, in pixels per frame
+
 PLAYER_MOVEMENT_SPEED = 5
-
 GRAVITY = 1
-
 PLAYER_JUMP_SPEED = 20
 
 
@@ -37,10 +38,15 @@ class MyGame(arcade.Window):
         # Separate variable that holds the player sprite
         self.player_sprite = None
 
+
         # Our physics engine
+
         self.physics_engine = None
 
+
         arcade.set_background_color(arcade.csscolor.CORNFLOWER_BLUE)
+        
+        self.player_move = set() # up, down, left, right
 
     def setup(self):
         """Set up the game here. Call this function to restart the game."""
@@ -79,9 +85,7 @@ class MyGame(arcade.Window):
         # Create the 'physics engine'
 
         self.physics_engine = arcade.PhysicsEnginePlatformer(
-
             self.player_sprite, gravity_constant=GRAVITY, walls=self.scene["Walls"]
-
         )
 
 
@@ -94,34 +98,77 @@ class MyGame(arcade.Window):
         # Draw our Scene
         self.scene.draw()
 
-    def on_key_press(self, key, modifiers):
-        """Called whenever a key is pressed."""
+    def update_player_speed(self):
+        self.player_sprite.change_y = 0
+        self.player_sprite.change_x = 0
+        
+        if "up" in self.player_move and "down" in self.player_move:
+            pass
+        else:
+            if "up" in self.player_move and self.physics_engine.can_jump():
+                    self.player_sprite.change_y = PLAYER_JUMP_SPEED
 
+        
+        if "left" in self.player_move and "right" in self.player_move:
+            pass
+        else:
+            if "left" in self.player_move:
+                self.player_sprite.change_x = -PLAYER_MOVEMENT_SPEED
+            elif "right" in self.player_move:
+                self.player_sprite.change_x = PLAYER_MOVEMENT_SPEED
+
+    def on_key_press(self, key, modifiers):
+
+        """Called whenever a key is pressed."""
 
         if key == arcade.key.UP or key == arcade.key.W:
 
-            if self.physics_engine.can_jump():
+            self.player_move.add("up")
 
-                self.player_sprite.change_y = PLAYER_JUMP_SPEED
+        elif key == arcade.key.DOWN or key == arcade.key.S:
+
+            self.player_move.add("down")
 
         elif key == arcade.key.LEFT or key == arcade.key.A:
-            self.player_sprite.change_x = -PLAYER_MOVEMENT_SPEED
+
+            self.player_move.add("left")
+
         elif key == arcade.key.RIGHT or key == arcade.key.D:
-            self.player_sprite.change_x = PLAYER_MOVEMENT_SPEED
+
+            self.player_move.add("right")
+        
+        self.update_player_speed()
+
 
     def on_key_release(self, key, modifiers):
-        """Called when the user releases a key."""
+        """Called when the user releases a key. """
 
-        if key == arcade.key.LEFT or key == arcade.key.A:
-            self.player_sprite.change_x = 0
-        elif key == arcade.key.RIGHT or key == arcade.key.D:
-            self.player_sprite.change_x = 0
+        if key == arcade.key.UP:
+            self.player_move.remove("up")
+            
+        elif key == arcade.key.DOWN:
+            self.player_move.remove("down")
+
+        elif key == arcade.key.LEFT:
+            self.player_move.remove("left")
+
+        elif key == arcade.key.RIGHT:
+            self.player_move.remove("right")
+        
+        self.update_player_speed()
+
+
 
     def on_update(self, delta_time):
+
         """Movement and game logic"""
 
+
+
         # Move the player with the physics engine
+
         self.physics_engine.update()
+
 
 
 def main():
