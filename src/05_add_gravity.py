@@ -106,9 +106,8 @@ class MyGame(arcade.Window):
             pass
         else:
             if "up" in self.player_move and self.physics_engine.can_jump():
-                    self.player_sprite.change_y = PLAYER_JUMP_SPEED
+                self.player_sprite.change_y = PLAYER_JUMP_SPEED
 
-        
         if "left" in self.player_move and "right" in self.player_move:
             pass
         else:
